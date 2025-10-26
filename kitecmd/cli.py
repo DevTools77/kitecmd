@@ -29,6 +29,9 @@ def main():
     # checkupdate command
     subparsers.add_parser("checkupdate", help="Check for updates and optionally install the latest version")
 
+    # install-ir command
+    subparsers.add_parser("install-ir", help="Install the kitecmd-IR package from PyPI")
+
     # version command
     subparsers.add_parser("version", help="Show the current version of kitecmd")
 
@@ -40,14 +43,14 @@ def main():
         run_test(args)
     elif args.command == "checkupdate":
         check_for_update("kitecmd")
+    elif args.command == "install-ir":
+        install_kitecmd_ir()
     else:
         parser.print_help()
 
 
 def run_test(args):
-    """Handle the 'test' command logic."""
     print(args.msg)
-
     if args.verbose:
         print("\n--- Verbose Info ---")
         print(f"kitecmd version: {get_package_version('kitecmd')}")
@@ -59,7 +62,6 @@ def run_test(args):
 
 
 def get_package_version(package_name):
-    """Safely get the package version."""
     try:
         return version(package_name)
     except PackageNotFoundError:
@@ -67,14 +69,11 @@ def get_package_version(package_name):
 
 
 def show_version(package_name):
-    """Print the installed version."""
     print(f"kitecmd version {get_package_version(package_name)}")
 
 
 def check_for_update(package_name):
-    """Check PyPI for the latest version and optionally update."""
     current_version = get_package_version(package_name)
-
     try:
         resp = requests.get(f"https://pypi.org/pypi/{package_name}/json", timeout=5)
         resp.raise_for_status()
@@ -89,8 +88,6 @@ def check_for_update(package_name):
         print("A new version is available.")
         print(f"Installed: {current_version}")
         print(f"Latest:    {latest_version}")
-
-        # Prompt user to update
         answer = input("Do you want to update to the latest version? (y/n): ").strip().lower()
         if answer == "y":
             try:
@@ -100,3 +97,13 @@ def check_for_update(package_name):
                 print("Failed to update the package. Try running as administrator or with elevated permissions.")
         else:
             print("Update cancelled.")
+
+
+def install_kitecmd_ir():
+    """Install the kitecmd-IR package from PyPI."""
+    print("Installing kitecmd-IR...")
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "kitecmd-IR"])
+        print("\nSuccessfully installed kitecmd-IR.")
+    except subprocess.CalledProcessError:
+        print("Failed to install kitecmd-IR. Try running as administrator or check your internet connection.")
