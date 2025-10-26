@@ -3,6 +3,7 @@ import requests
 import sys
 import platform
 import os
+import subprocess
 from importlib.metadata import version, PackageNotFoundError
 
 
@@ -12,7 +13,6 @@ def main():
         description="Kite Command Utility"
     )
 
-    # Global version flag
     parser.add_argument(
         "--version", "-v",
         action="store_true",
@@ -21,29 +21,25 @@ def main():
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
-    # === test command ===
+    # test command
     test_parser = subparsers.add_parser("test", help="Run a test message")
     test_parser.add_argument("--msg", "-m", default="This is a test.", help="Custom test message")
     test_parser.add_argument("--verbose", "-V", action="store_true", help="Show detailed system info")
 
-    # === checkupdate command ===
-    subparsers.add_parser("checkupdate", help="Check if a new version is available on PyPI")
+    # checkupdate command
+    subparsers.add_parser("checkupdate", help="Check for updates and optionally install the latest version")
 
-    # === version command ===
+    # version command
     subparsers.add_parser("version", help="Show the current version of kitecmd")
 
     args = parser.parse_args()
 
-    # --- Command logic ---
     if args.version or args.command == "version":
         show_version("kitecmd")
-
     elif args.command == "test":
         run_test(args)
-
     elif args.command == "checkupdate":
         check_for_update("kitecmd")
-
     else:
         parser.print_help()
 
@@ -76,7 +72,7 @@ def show_version(package_name):
 
 
 def check_for_update(package_name):
-    """Check PyPI for the latest version of this package."""
+    """Check PyPI for the latest version and optionally update."""
     current_version = get_package_version(package_name)
 
     try:
@@ -88,9 +84,19 @@ def check_for_update(package_name):
         sys.exit(1)
 
     if current_version == latest_version:
-        print(f"You are using the latest version ({current_version})")
+        print(f"You are using the latest version ({current_version}).")
     else:
-        print("A new version is available!")
+        print("A new version is available.")
         print(f"Installed: {current_version}")
         print(f"Latest:    {latest_version}")
-        print(f"To update, run: pip install --upgrade {package_name}")
+
+        # Prompt user to update
+        answer = input("Do you want to update to the latest version? (y/n): ").strip().lower()
+        if answer == "y":
+            try:
+                subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", package_name])
+                print(f"\nSuccessfully updated {package_name} to version {latest_version}.")
+            except subprocess.CalledProcessError:
+                print("Failed to update the package. Try running as administrator or with elevated permissions.")
+        else:
+            print("Update cancelled.")
