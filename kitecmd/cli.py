@@ -51,7 +51,7 @@ def show_version(package_name):
         current_version = version(package_name)
         print(f"kitecmd version {current_version}")
     except PackageNotFoundError:
-        print("⚠️  Could not determine the version (package not found).")
+        print("Could not determine the version (package not found).")
 
 
 def check_for_update(package_name):
@@ -59,7 +59,7 @@ def check_for_update(package_name):
     try:
         current_version = version(package_name)
     except PackageNotFoundError:
-        print("⚠️  Unable to detect installed version.")
+        print("Unable to detect installed version.")
         sys.exit(1)
 
     try:
@@ -67,13 +67,13 @@ def check_for_update(package_name):
         resp.raise_for_status()
         latest_version = resp.json()["info"]["version"]
     except requests.RequestException as e:
-        print(f"❌ Could not fetch update info: {e}")
+        print(f"Could not fetch update info: {e}")
         sys.exit(1)
 
     if current_version == latest_version:
-        print(f"✅ You are using the latest version ({current_version})")
+        print(f"You are using the latest version ({current_version})")
     else:
-        print(f"⬆️  A new version is available!")
+        print(f"A new version is available!")
         print(f"   Installed: {current_version}")
         print(f"   Latest:    {latest_version}")
-        print(f"👉 To update, run: pip install --upgrade {package_name}")
+        print(f"To update, run: pip install --upgrade {package_name}")
