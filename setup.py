@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="kitecmd",
-    version="0.3",
+    version="0.4",
     author="coltonsr77",
     description="A simple CLI example for PyPI",
     packages=find_packages(),
