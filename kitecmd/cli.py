@@ -1,6 +1,8 @@
 import argparse
 import requests
 import sys
+import platform
+import os
 from importlib.metadata import version, PackageNotFoundError
 
 
@@ -22,6 +24,7 @@ def main():
     # === test command ===
     test_parser = subparsers.add_parser("test", help="Run a test message")
     test_parser.add_argument("--msg", "-m", default="This is a test.", help="Custom test message")
+    test_parser.add_argument("--verbose", "-V", action="store_true", help="Show detailed system info")
 
     # === checkupdate command ===
     subparsers.add_parser("checkupdate", help="Check if a new version is available on PyPI")
@@ -36,7 +39,7 @@ def main():
         show_version("kitecmd")
 
     elif args.command == "test":
-        print(f"🧪 {args.msg}")
+        run_test(args)
 
     elif args.command == "checkupdate":
         check_for_update("kitecmd")
@@ -45,22 +48,36 @@ def main():
         parser.print_help()
 
 
+def run_test(args):
+    """Handle the 'test' command logic."""
+    print(args.msg)
+
+    if args.verbose:
+        print("\n--- Verbose Info ---")
+        print(f"kitecmd version: {get_package_version('kitecmd')}")
+        print(f"Python version: {platform.python_version()}")
+        print(f"Platform: {platform.system()} {platform.release()}")
+        print(f"Working directory: {os.getcwd()}")
+        print(f"User: {os.getenv('USERNAME') or os.getenv('USER')}")
+        print("--------------------")
+
+
+def get_package_version(package_name):
+    """Safely get the package version."""
+    try:
+        return version(package_name)
+    except PackageNotFoundError:
+        return "Unknown"
+
+
 def show_version(package_name):
     """Print the installed version."""
-    try:
-        current_version = version(package_name)
-        print(f"kitecmd version {current_version}")
-    except PackageNotFoundError:
-        print("Could not determine the version (package not found).")
+    print(f"kitecmd version {get_package_version(package_name)}")
 
 
 def check_for_update(package_name):
     """Check PyPI for the latest version of this package."""
-    try:
-        current_version = version(package_name)
-    except PackageNotFoundError:
-        print("Unable to detect installed version.")
-        sys.exit(1)
+    current_version = get_package_version(package_name)
 
     try:
         resp = requests.get(f"https://pypi.org/pypi/{package_name}/json", timeout=5)
@@ -73,7 +90,7 @@ def check_for_update(package_name):
     if current_version == latest_version:
         print(f"You are using the latest version ({current_version})")
     else:
-        print(f"A new version is available!")
-        print(f"   Installed: {current_version}")
-        print(f"   Latest:    {latest_version}")
+        print("A new version is available!")
+        print(f"Installed: {current_version}")
+        print(f"Latest:    {latest_version}")
         print(f"To update, run: pip install --upgrade {package_name}")
