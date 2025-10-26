@@ -9,34 +9,49 @@ def main():
         prog="kitecmd",
         description="Kite Command Utility"
     )
+
+    # Add a global version flag
+    parser.add_argument(
+        "--version", "-v",
+        action="store_true",
+        help="Show the current version of kitecmd"
+    )
+
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # === hello command ===
     hello_parser = subparsers.add_parser("hello", help="Print a greeting")
     hello_parser.add_argument("--name", "-n", default="World", help="Who to greet")
 
-    # === add command ===
-    add_parser = subparsers.add_parser("add", help="Add two numbers")
-    add_parser.add_argument("a", type=float, help="First number")
-    add_parser.add_argument("b", type=float, help="Second number")
-
     # === checkupdate command ===
     subparsers.add_parser("checkupdate", help="Check if a new version is available on PyPI")
+
+    # === version command ===
+    subparsers.add_parser("version", help="Show the current version of kitecmd")
 
     args = parser.parse_args()
 
     # --- Command logic ---
-    if args.command == "hello":
-        print(f"Hello, {args.name}!")
+    if args.version or args.command == "version":
+        show_version("kitecmd")
 
-    elif args.command == "add":
-        print(f"Result: {args.a + args.b}")
+    elif args.command == "hello":
+        print(f"Hello, {args.name}!")
 
     elif args.command == "checkupdate":
         check_for_update("kitecmd")
 
     else:
         parser.print_help()
+
+
+def show_version(package_name):
+    """Print the installed version."""
+    try:
+        current_version = version(package_name)
+        print(f"kitecmd version {current_version}")
+    except PackageNotFoundError:
+        print("⚠️  Could not determine the version (package not found).")
 
 
 def check_for_update(package_name):
