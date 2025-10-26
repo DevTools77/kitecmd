@@ -10,7 +10,7 @@ def main():
         description="Kite Command Utility"
     )
 
-    # Add a global version flag
+    # Global version flag
     parser.add_argument(
         "--version", "-v",
         action="store_true",
@@ -19,9 +19,9 @@ def main():
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
-    # === hello command ===
-    hello_parser = subparsers.add_parser("hello", help="Print a greeting")
-    hello_parser.add_argument("--name", "-n", default="World", help="Who to greet")
+    # === test command ===
+    test_parser = subparsers.add_parser("test", help="Run a test message")
+    test_parser.add_argument("--msg", "-m", default="This is a test.", help="Custom test message")
 
     # === checkupdate command ===
     subparsers.add_parser("checkupdate", help="Check if a new version is available on PyPI")
@@ -35,8 +35,8 @@ def main():
     if args.version or args.command == "version":
         show_version("kitecmd")
 
-    elif args.command == "hello":
-        print(f"Hello, {args.name}!")
+    elif args.command == "test":
+        print(f"🧪 {args.msg}")
 
     elif args.command == "checkupdate":
         check_for_update("kitecmd")
