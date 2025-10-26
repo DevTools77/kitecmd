@@ -2,10 +2,11 @@ from setuptools import setup, find_packages
 
 setup(
     name="kitecmd",
-    version="0.5",
+    version="0.6",
     author="coltonsr77",
-    description="A simple CLI example for PyPI that runs anywhere",
+    description="A CLI tool with update checking",
     packages=find_packages(include=["kitecmd", "kitecmd.*"]),
+    install_requires=["requests"],
     entry_points={
         "console_scripts": [
             "kitecmd=kitecmd.cli:main",
