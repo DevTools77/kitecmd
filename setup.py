@@ -4,7 +4,7 @@ setup(
     name="kitecmd",
     version="0.9",
     author="coltonsr77",
-    description="A CLI tool with update checking and other tools.",
+    description="A CLI tool with update checking and other tools like kitecmd-IR.",
     packages=find_packages(include=["kitecmd", "kitecmd.*"]),
     install_requires=["requests"],
     entry_points={
