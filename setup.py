@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="kitecmd",
-    version="0.8",
+    version="0.9",
     author="coltonsr77",
     description="A CLI tool with update checking and other tools.",
     packages=find_packages(include=["kitecmd", "kitecmd.*"]),
