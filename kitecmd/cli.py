@@ -99,7 +99,7 @@ def check_for_update(package_name):
             print("Update cancelled.")
 
 
-def install_kitecmd_ir():
+def install_kitecmd_IR():
     """Install the kitecmd-IR package from PyPI."""
     print("Installing kitecmd-IR...")
     try:
