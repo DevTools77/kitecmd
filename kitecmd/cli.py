@@ -94,7 +94,7 @@ def check_for_update(package_name):
                 subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", package_name])
                 print(f"\nSuccessfully updated {package_name} to version {latest_version}.")
             except subprocess.CalledProcessError:
-                print("Failed to update the package. Try running as administrator or with elevated permissions.")
+                print("Failed to update kitecmd. Try running as administrator or with elevated permissions.")
         else:
             print("Update cancelled.")
 
