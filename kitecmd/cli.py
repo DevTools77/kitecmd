@@ -30,7 +30,7 @@ def main():
     subparsers.add_parser("checkupdate", help="Check for updates and optionally install the latest version")
 
     # install-ir command
-    subparsers.add_parser("install-ir", help="Install the kitecmd-IR package from PyPI")
+    subparsers.add_parser("install-IR", help="Install the kitecmd-IR package from PyPI")
 
     # version command
     subparsers.add_parser("version", help="Show the current version of kitecmd")
@@ -43,8 +43,8 @@ def main():
         run_test(args)
     elif args.command == "checkupdate":
         check_for_update("kitecmd")
-    elif args.command == "install-ir":
-        install_kitecmd_ir()
+    elif args.command == "install-IR":
+        install_kitecmd_IR()
     else:
         parser.print_help()
 
