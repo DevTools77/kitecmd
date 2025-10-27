@@ -30,7 +30,7 @@ def main():
     subparsers.add_parser("checkupdate", help="Check for updates and optionally install the latest version")
 
     # install-ir command
-    subparsers.add_parser("install-ir", help="Install the kitecmd-IR package from PyPI")
+    subparsers.add_parser("install-IR", help="Install the kitecmd-IR package from PyPI")
 
     # version command
     subparsers.add_parser("version", help="Show the current version of kitecmd")
@@ -43,8 +43,8 @@ def main():
         run_test(args)
     elif args.command == "checkupdate":
         check_for_update("kitecmd")
-    elif args.command == "install-ir":
-        install_kitecmd_ir()
+    elif args.command == "install-IR":
+        install_kitecmd_IR()
     else:
         parser.print_help()
 
@@ -94,12 +94,12 @@ def check_for_update(package_name):
                 subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", package_name])
                 print(f"\nSuccessfully updated {package_name} to version {latest_version}.")
             except subprocess.CalledProcessError:
-                print("Failed to update the package. Try running as administrator or with elevated permissions.")
+                print("Failed to update kitecmd. Try running as administrator or with elevated permissions.")
         else:
             print("Update cancelled.")
 
 
-def install_kitecmd_ir():
+def install_kitecmd_IR():
     """Install the kitecmd-IR package from PyPI."""
     print("Installing kitecmd-IR...")
     try:
