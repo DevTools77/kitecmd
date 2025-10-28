@@ -29,7 +29,7 @@ def main():
     # checkupdate command
     subparsers.add_parser("checkupdate", help="Check for updates and optionally install the latest version")
 
-    # install-ir command
+    # install-IR command
     subparsers.add_parser("install-IR", help="Install the kitecmd-IR package from PyPI")
 
     # version command
